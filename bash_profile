@@ -19,7 +19,7 @@ alias flushDNS='dscacheutil -flushcache'
 alias editHosts='sudo edit /etc/hosts'
 alias httpErr='tail /var/log/httpd/error_log'
 alias apacheLogs='less +F /var/log/apache2/error_log'
-cd () { builtin cd "$@"; ll; }
+cd () { builtin cd "$@"; ls; }
 
 #   mcd: Make directory and cd into it
 #   --------------------------------------------------------
@@ -86,7 +86,7 @@ which -s subl && export EDITOR="subl --wait"
 
 # Change the prompt
 print_before_the_prompt () {
-  printf "$BPurple%s\n$Green%s\n$Cyan%s $Blue@%s$Color_Off" "__________________" "$PWD" "$HOSTNAME" "$USER"
+  printf "$BPurple%s\n$Green%s\n$Cyan%s $Blue@%s$Color_Off" "__________________" "$PWD" "$USER"
 }
  
 PROMPT_COMMAND=print_before_the_prompt
