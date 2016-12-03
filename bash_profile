@@ -85,8 +85,15 @@ export GREP_OPTIONS='--color=always'
 which -s subl && export EDITOR="subl --wait"
 
 # Change the prompt
-export PS1="________________________________________________________________________________\n| \w @ \h (\u) \n~> "
-export PS2="~> "
+print_before_the_prompt () {
+  printf "$BPurple%s\n$Green%s\n$Cyan%s $Blue@%s$Color_Off" "__________________" "$PWD" "$HOSTNAME" "$USER"
+}
+ 
+PROMPT_COMMAND=print_before_the_prompt
+
+PS1='~>'
+
+export CLICOLOR=1
 
 # Reset
 Color_Off='\e[0m'       # Text Reset
