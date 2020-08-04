@@ -2,6 +2,8 @@
 export PATH="$PATH:/usr/local/bin/"
 export PATH="/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 
+alias refresh='source ~/.zshrc'
+alias be='bundle exec'
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias mkdir='mkdir -pv'
@@ -78,11 +80,37 @@ httpDebug () {
   /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n";
 }
 
+#   gitSlug: Returns a sluggified version of your git username.
+#   -----------------------------------------------------------
+gitSlug () {
+  typeset -l output
+  output=${"$(git config user.name)"// /}
+  echo $output
+}
+
+#   gojira: Create a branch for a given Jira ticket number.
+#   -----------------------------------------------------------
+gojira () {
+  echo $1
+  if [ -z "$1" ]; then
+    echo "You need to specify a Jira issue code, ya dingus!"
+  else
+    git checkout -b "$(gitSlug)/$1"
+  fi
+}
+
+#   killport: Find and kill process running on a given port
+#   ---------------------------------------------------------
+killport () {
+  lsof -i TCP:$1 | grep LISTEN | awk '{print $2}' | xargs kill -9
+}
+
+fuckYoBranches () {
+  git branch --merged | egrep -v "(^\*|master|experiment)" | xargs git branch -d
+}
+
 # Force grep to always use the color option and show line numbers
 export GREP_OPTIONS='--color=always'
-
-# Set sublime as the default editor
-which -s subl && export EDITOR="subl --wait"
 
 # Change the prompt
 print_before_the_prompt () {
@@ -167,3 +195,8 @@ On_IBlue='\e[0;104m'    # Blue
 On_IPurple='\e[0;105m'  # Purple
 On_ICyan='\e[0;106m'    # Cyan
 On_IWhite='\e[0;107m'   # White
+
+
+
+# Must be at the end of zsh profile
+source ~/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
